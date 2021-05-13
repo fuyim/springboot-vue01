@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.obtk.mapper.UserDao">
+
+    <sql id="userField">
+        id , username , password , sex ,  telephone , email , CODE, IDCard, post, adminName, nation, crateData
+    </sql>
+
+    <select id="login" resultType="com.obtk.bean.User">
+        select <include refid="userField"/> from user where
+        telephone = #{telephoneEmail} or email = #{telephoneEmail} and password = #{password}
+    </select>
+
+    <update id="updateImage">
+        update imageFile set fileName = #{fileName} , filePath=#{imageUrl} where u_id=#{id}
+    </update>
+
+    <select id="getByIdImage" resultType="com.obtk.bean.ImageFile">
+        select id  , fileName , filePath , u_id from imageFile where u_id=#{id}
+    </select>
+
+    <select id="findAll" resultType="com.obtk.bean.User">
+        select <include refid="userField"/> from user where id = #{id}
+    </select>
+</mapper>
