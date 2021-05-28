@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.obtk.util.jwt.JwtUtil;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,10 @@ public class HandlerBean  implements HandlerInterceptor{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //验证token
         Map<String,Object> map = new HashMap<>();
+        if (HttpMethod.OPTIONS.toString().equals(request.getMethod())) {
+            System.out.println("OPTIONS请求，放行");
+            return true;
+        }
         String token = request.getHeader("Authentication-Token");
         try {
             DecodedJWT decodeJwt = JwtUtil.getDecodeJwt(token);

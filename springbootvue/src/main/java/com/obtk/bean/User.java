@@ -18,5 +18,4 @@ public class User implements Serializable {
     private String crateData;
     private String adminName;
     private String nation;
-    private String CODE;
 }

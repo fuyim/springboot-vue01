@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.obtk.mapper.RegisterUserDao">
+    <sql id="MySql" >
+        id,username,password,sex,telephone,email,IDCard,QQ,post,adminName,nation,crateData
+    </sql>
+
+    <select id="findAllCode" resultType="com.obtk.bean.administratorCode">
+        select id , code from administratorCode
+    </select>
+
+    <insert id="register">
+        insert into user (<include refid="MySql"/>) values
+         (0,#{user.username},#{user.password},#{user.sex},#{user.telephone},#{user.email},#{user.IDCard},#{user.QQ},#{user.post},#{user.adminName},#{user.nation},#{user.crateData})
+    </insert>
+
+    <insert id="insertImage">
+        insert into imageFile (id,fileName,filePath,u_id) values
+        (0,default ,default ,#{id})
+    </insert>
+
+    <select id="finUserID" resultType="com.obtk.bean.User">
+        select <include refid="MySql"/> from user where username =#{username} and password = #{password}
+    </select>
+
+    <select id="findAllDormitoryArea" resultType="com.obtk.bean.DormitoryArea">
+        select id , dormitory_name , u_id , state from dormitoryArea
+    </select>
+
+    <update id="updateDormitoryArea">
+        update dormitoryArea set u_id = #{id} , state = 1 where id = #{optionsId}
+    </update>
+
+
+</mapper>

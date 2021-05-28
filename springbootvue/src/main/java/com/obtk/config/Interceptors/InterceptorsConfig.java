@@ -18,7 +18,15 @@ public class InterceptorsConfig implements WebMvcConfigurer {
                 "/checkCode",
                 "/upload.do",
                 "/findByIDUser.do",
-                "/test01.do");
+                "/updateUser.do",
+                "/updatePass.do",
+                "/findAllCode.do",
+                "/register.do",
+                "/findAllMz.do",
+                "/insertImage.do",
+                "/findUserId.do",
+                "/findAllDormitoryArea.do",
+                "/updateDormitoryArea.do");
 
     }
 }

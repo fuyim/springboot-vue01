@@ -1,20 +1,28 @@
 package com.obtk.service.Impl;
 
 import com.obtk.bean.ImageFile;
+import com.obtk.bean.Mz;
 import com.obtk.bean.User;
 import com.obtk.mapper.UserDao;
 import com.obtk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao dao;
+
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     /**
      * 登录操作
@@ -88,5 +96,54 @@ public class UserServiceImpl implements UserService {
         return list;
     }
 
+    @Override
+    @Transactional
+    public Boolean updateUser(User user,Integer id) {
+        Boolean flag = false;
+        try {
+            dao.updateUser(user,id);
+            flag =true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
 
+    @Override
+    @Transactional
+    public Boolean updatePass(Integer id, String newPass) {
+        Boolean flag = false;
+        try {
+            dao.updatePass(id,newPass);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    @Override
+    public List<Mz> findAllMz() {
+        //查询缓存中的数据
+        Set<ZSetOperations.TypedTuple<String>> tuples = redisTemplate.boundZSetOps("mz").rangeWithScores(0, -1);
+        List<Mz> list = null;
+        if (tuples==null||tuples.size()==0){
+            //缓存为空，先查询数据库
+            list = dao.findAllMz();
+            //将查询到的结果添加到缓存当中
+            for (int i=0;i<list.size();i++){
+                redisTemplate.boundZSetOps("mz").add(list.get(i).getName(),list.get(i).getId());
+            }
+        }else {
+            //缓存有值从缓存查
+            list = new ArrayList<Mz>();
+            for (ZSetOperations.TypedTuple<String> tuple : tuples){
+                Mz mz = new Mz();
+                mz.setId(tuple.getScore().intValue());
+                mz.setName(tuple.getValue());
+                list.add(mz);
+            }
+        }
+        return list;
+    }
 }

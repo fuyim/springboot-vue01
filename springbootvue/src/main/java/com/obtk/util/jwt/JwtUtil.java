@@ -34,4 +34,11 @@ public class JwtUtil {
         return verify;
     }
 
+    public static int getParams(String token){
+        DecodedJWT decodeJwt = getDecodeJwt(token);
+        String idStr = decodeJwt.getClaim("id").asString();
+        int id = Integer.parseInt(idStr);
+        return id;
+    }
+
 }

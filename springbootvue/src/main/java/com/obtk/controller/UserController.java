@@ -3,6 +3,7 @@ package com.obtk.controller;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.obtk.bean.ImageFile;
+import com.obtk.bean.Mz;
 import com.obtk.bean.User;
 import com.obtk.service.UserService;
 import com.obtk.util.cookie.CookieUtils;
@@ -69,8 +70,8 @@ public class UserController {
                 Integer id = user.getId();
                 log.info(id.toString());
                 payload.put("id",id.toString());
-                payload.put("telephoneEmail",telephoneEmail);
-                payload.put("password",password);
+//                payload.put("telephoneEmail",telephoneEmail);
+//                payload.put("password",password);
                 String token = JwtUtil.getToken(payload);
                 map.put("token",token);
                 //判断缓存中是否存在token
@@ -110,17 +111,14 @@ public class UserController {
             System.out.println(fileName);
             //获取字节数
             byte[] bytes = file.getBytes();
-            String url = "E:\\idea-work\\vue-springboot-project01\\vueproject\\static\\img\\"+fileName;
+            String url = "D:\\idea-work\\vue-springboot-project01\\vueproject\\static\\img\\"+fileName;
             Path path = Paths.get(url);
             String ImageUrl = path.toString();
             //写入文件
             Files.write(path,bytes);
             //从请求头中获取token
             String token = request.getHeader("Authentication-Token");
-            DecodedJWT decodeJwt = JwtUtil.getDecodeJwt(token);
-            String isStr = decodeJwt.getClaim("id").asString();
-            //处理id
-            int id = Integer.parseInt(isStr);
+            int id = JwtUtil.getParams(token);
             System.out.println(id);
             Boolean flag = service.updateImage(id,ImageUrl,fileName);
             //判斷是否修改成功
@@ -149,18 +147,17 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
         //进行token验证
         String token = request.getHeader("Authentication-Token");
-        DecodedJWT decodeJwt = JwtUtil.getDecodeJwt(token);
-        String idStr = decodeJwt.getClaim("id").asString();
-        //处理id
-        Integer id = Integer.parseInt(idStr);
-
+        int id = JwtUtil.getParams(token);
+        System.out.println(id);
         ImageFile imageFile = service.getByIdImage(id);
         if (imageFile!=null){
             map.put("imageFile",imageFile);
             map.put("token",true);
+            map.put("msg",true);
+            map.put("id",imageFile.getId());
         }else {
             map.put("token",false);
-            map.put("msg","error");
+            map.put("msg",false);
         }
         return map;
     }
@@ -174,11 +171,49 @@ public class UserController {
     public List<User> findAll(HttpServletRequest request){
         //进行token验证
         String token = request.getHeader("Authentication-Token");
-        DecodedJWT decodeJwt = JwtUtil.getDecodeJwt(token);
-        String idStr = decodeJwt.getClaim("id").asString();
-        //处理id
-        Integer id = Integer.parseInt(idStr);
+        int id = JwtUtil.getParams(token);
         List<User> list = service.findAll(id);
+        return list;
+    }
+
+    @PostMapping("/updateUser.do")
+    @ResponseBody
+    public String updateUser(HttpServletRequest request,User user){
+        System.out.println(user);
+        //进行token验证
+        String token = request.getHeader("Authentication-Token");
+        int id = JwtUtil.getParams(token);
+        System.out.println(user.getEmail());
+        Boolean flag = service.updateUser(user,id);
+        if (flag){
+            return "success";
+        }
+        return "error";
+    }
+
+    @GetMapping("/updatePass.do")
+    @ResponseBody
+    public Map<String,Object> updatePass(HttpServletRequest request,String newPass,String checkCode){
+        HashMap<String, Object> map = new HashMap<>();
+        //获取id
+        String token = request.getHeader("Authentication-Token");
+        int id = JwtUtil.getParams(token);
+        //验证验证码
+        HttpSession session = request.getSession();
+        String checkCode_session =(String) session.getAttribute("checkCode_session");
+        if(checkCode != null && !checkCode_session.equalsIgnoreCase(checkCode)){
+            map.put("checkCode",false);
+        }else {
+            Boolean flag = service.updatePass(id,newPass);
+            map.put("msg",flag);
+        }
+        return map;
+    }
+
+    @GetMapping("/findAllMz.do")
+    @ResponseBody
+    public List<Mz> findAllMz(HttpServletRequest request){
+        List<Mz> list = service.findAllMz();
         return list;
     }
 

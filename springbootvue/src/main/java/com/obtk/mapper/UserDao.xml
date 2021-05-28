@@ -5,7 +5,7 @@
 <mapper namespace="com.obtk.mapper.UserDao">
 
     <sql id="userField">
-        id , username , password , sex ,  telephone , email , CODE, IDCard, post, adminName, nation, crateData
+        id , username , password , sex ,  telephone , email ,QQ,  IDCard, post, adminName, nation, crateData
     </sql>
 
     <select id="login" resultType="com.obtk.bean.User">
@@ -23,5 +23,17 @@
 
     <select id="findAll" resultType="com.obtk.bean.User">
         select <include refid="userField"/> from user where id = #{id}
+    </select>
+
+    <update id="updateUser">
+        update user set telephone =#{user.telephone},email=#{user.email}, QQ=#{user.QQ},adminName=#{user.adminName},nation=#{user.nation} where id=#{id}
+    </update>
+
+    <update id="updatePass">
+        update user set password = #{newPass} where id = #{id}
+    </update>
+
+    <select id="findAllMz" resultType="com.obtk.bean.Mz">
+        select id , name from mz
     </select>
 </mapper>

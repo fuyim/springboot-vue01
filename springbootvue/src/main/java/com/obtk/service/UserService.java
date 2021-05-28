@@ -1,6 +1,7 @@
 package com.obtk.service;
 
 import com.obtk.bean.ImageFile;
+import com.obtk.bean.Mz;
 import com.obtk.bean.User;
 
 import java.util.List;
@@ -16,4 +17,10 @@ public interface UserService {
     ImageFile getByIdImage(Integer id);
 
     List<User> findAll(Integer id);
+
+    Boolean updateUser(User user,Integer id);
+
+    Boolean updatePass(Integer id, String newPass);
+
+    List<Mz> findAllMz();
 }

@@ -1,6 +1,7 @@
 package com.obtk.mapper;
 
 import com.obtk.bean.ImageFile;
+import com.obtk.bean.Mz;
 import com.obtk.bean.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,10 @@ public interface UserDao {
     ImageFile getByIdImage(Integer id);
 
     List<User> findAll(Integer id);
+
+    void updateUser(@Param("user") User user,@Param("id") Integer id);
+
+    void updatePass(@Param("id") Integer id, @Param("newPass") String newPass);
+
+    List<Mz> findAllMz();
 }
