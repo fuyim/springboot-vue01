@@ -1,16 +1,17 @@
 package com.obtk.service.Impl;
 
-import com.obtk.bean.DormitoryArea;
-import com.obtk.bean.User;
-import com.obtk.bean.administratorCode;
+import com.obtk.bean.*;
 import com.obtk.mapper.RegisterUserDao;
 import com.obtk.service.RegisterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RegisterUserServiceImpl implements RegisterUserService {
@@ -19,14 +20,14 @@ public class RegisterUserServiceImpl implements RegisterUserService {
     private RegisterUserDao dao;
 
     @Autowired
-    private RedisTemplate<String,String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
 
     @Override
     public List<administratorCode> findAllCode() {
         List<administratorCode> list = null;
         try {
-            list =  dao.findAllCode();
+            list = dao.findAllCode();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,7 +59,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
     @Override
     public User findUserID(String username, String password) {
-        User user = dao.finUserID(username,password);
+        User user = dao.finUserID(username, password);
         return user;
     }
 
@@ -69,7 +70,31 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
     @Override
     @Transactional
-    public Boolean updateDormitoryArea(Integer id,Integer optionsId) {
-        return dao.updateDormitoryArea(id,optionsId);
+    public Boolean updateDormitoryArea(Integer id, Integer optionsId) {
+        return dao.updateDormitoryArea(id, optionsId);
+    }
+
+    @Override
+    public List<Dormitory> findAllDormitory() {
+        List<Dormitory> list = null;
+        try {
+            list = dao.findAllDormitory();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    @Transactional
+    public Boolean insertStudentDormitory(Integer id, Integer optionsId) {
+        Boolean flag = false;
+        try {
+            dao.insertStudentDormitory(id,optionsId);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 }

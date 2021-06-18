@@ -2,9 +2,7 @@ package com.obtk.controller;
 
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.obtk.bean.ImageFile;
-import com.obtk.bean.Mz;
-import com.obtk.bean.User;
+import com.obtk.bean.*;
 import com.obtk.service.UserService;
 import com.obtk.util.cookie.CookieUtils;
 import com.obtk.util.jwt.JwtUtil;
@@ -168,11 +166,11 @@ public class UserController {
      */
     @GetMapping("/findByIDUser.do")
     @ResponseBody
-    public List<User> findAll(HttpServletRequest request){
+    public List<User> findAll(HttpServletRequest request,Integer personalId){
         //进行token验证
         String token = request.getHeader("Authentication-Token");
         int id = JwtUtil.getParams(token);
-        List<User> list = service.findAll(id);
+        List<User> list = service.findAll(id,personalId);
         return list;
     }
 
@@ -215,6 +213,61 @@ public class UserController {
     public List<Mz> findAllMz(HttpServletRequest request){
         List<Mz> list = service.findAllMz();
         return list;
+    }
+
+    /**
+     * 查询用户的post
+     * @param request
+     * @return
+     */
+    @PostMapping("/findByPostUser.do")
+    @ResponseBody
+    public List<UserInfo> findByPostUser(HttpServletRequest request){
+        //获取id
+        String token = request.getHeader("Authentication-Token");
+        int id = JwtUtil.getParams(token);
+        List<UserInfo> list = service.findByPostUser(id);
+        return list;
+    }
+
+    /**
+     * 根据对应手机号查询用户
+     * @param telephone
+     * @return
+     */
+    @PostMapping("/findByTelephoneUser.do")
+    @ResponseBody
+    public List<User> findByTelephoneUser(String telephone){
+        List<User> list = service.findByTelephoneUser(telephone);
+        return list;
+    }
+
+    /**
+     * 根据对应id查询验证码
+     * @param id
+     * @return
+     */
+    @GetMapping("/findByIdCode.do")
+    @ResponseBody
+    public List<UpPass> findByIdCode(Integer id){
+        List<UpPass> list  = service.findByIdCode(id);
+        return list;
+    }
+
+    /**
+     * 输入验证码来重置密码
+     * @param id
+     * @param telephone
+     * @return
+     */
+    @GetMapping("/UpPssByCode.do")
+    @ResponseBody
+    public String UpPssByCode(Integer id ,String telephone,String newPass){
+        Boolean flag = service.UpPssByCode(id,telephone,newPass);
+        if (flag){
+            return "success";
+        }
+        return "error";
     }
 
 }

@@ -33,5 +33,13 @@
         update dormitoryArea set u_id = #{id} , state = 1 where id = #{optionsId}
     </update>
 
+    <select id="findAllDormitory" resultType="com.obtk.bean.Dormitory">
+        select id , name from dormitory
+    </select>
+
+    <insert id="insertStudentDormitory">
+        insert into Student_dormitory (id , u_id , dormitory_id) values (0,#{id},#{optionsId})
+    </insert>
+
 
 </mapper>

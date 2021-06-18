@@ -1,10 +1,12 @@
 package com.obtk.mapper;
 
+import com.obtk.bean.Dormitory;
 import com.obtk.bean.DormitoryArea;
 import com.obtk.bean.User;
 import com.obtk.bean.administratorCode;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -21,4 +23,8 @@ public interface RegisterUserDao {
     List<DormitoryArea> findAllDormitoryArea();
 
     Boolean updateDormitoryArea(@Param("id") Integer id,@Param("optionsId") Integer optionsId);
+
+    List<Dormitory> findAllDormitory();
+
+    void insertStudentDormitory(@Param("id") Integer id,@Param("optionsId") Integer optionsId);
 }

@@ -1,9 +1,12 @@
 package com.obtk;
 
+import com.obtk.util.jwt.JwtUtil;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashMap;
 
 @SpringBootTest
 class SpringbootvueApplicationTests {
@@ -18,6 +21,16 @@ class SpringbootvueApplicationTests {
         System.out.println("username :"+username);
         String password = stringEncryptor.encrypt("fu20010412");
         System.out.println("password :"+password);
+    }
+
+
+    @Test
+    public void Test2(){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("username","123wqeeqwe");
+        map.put("password","qweqewqqzsda");
+        String token = JwtUtil.getToken(map);
+        System.out.println("token = " + token);
     }
 
 }

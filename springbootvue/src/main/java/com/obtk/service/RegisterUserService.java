@@ -1,5 +1,6 @@
 package com.obtk.service;
 
+import com.obtk.bean.Dormitory;
 import com.obtk.bean.DormitoryArea;
 import com.obtk.bean.User;
 import com.obtk.bean.administratorCode;
@@ -18,4 +19,8 @@ public interface RegisterUserService {
     List<DormitoryArea> findAllDormitoryArea();
 
     Boolean updateDormitoryArea(Integer id,Integer optionsId);
+
+    List<Dormitory> findAllDormitory();
+
+    Boolean insertStudentDormitory(Integer id, Integer optionsId);
 }

@@ -22,7 +22,15 @@
     </select>
 
     <select id="findAll" resultType="com.obtk.bean.User">
-        select <include refid="userField"/> from user where id = #{id}
+        select <include refid="userField"/> from user
+        <where>
+            <if test="personalId != null">
+               and id = #{personalId}
+            </if>
+            <if test="personalId == null">
+                and id = #{id}
+            </if>
+        </where>
     </select>
 
     <update id="updateUser">
@@ -36,4 +44,31 @@
     <select id="findAllMz" resultType="com.obtk.bean.Mz">
         select id , name from mz
     </select>
+    
+    <resultMap id="UserInfo" type="com.obtk.bean.UserInfo">
+        <id column="u.id" property="id"></id>
+        <result column="u.username" property="username"></result>
+        <result column="u.sex" property="sex"></result>
+        <result column="u.telephone" property="telephone"/>
+        <result column="u.nation" property="nation"/>
+        <result column="u.email" property="email"></result>
+        <result column="d.dormitory_name" property="dormitoryAreaName"></result>
+        <result column="" property="dormitoryName"/>
+    </resultMap>
+
+    <select id="findByPostUser" resultMap="UserInfo">
+        select u.id , u.username , u.sex , u.telephone , u.nation , u.email ,d.dormitory_name , name from user u , dormitoryArea d where d.u_id = u.id and u.id =#{id}
+    </select>
+
+    <select id="findByTelephoneUser" resultType="com.obtk.bean.User">
+        select <include refid="userField"/> from user where telephone = #{telephone}
+    </select>
+
+    <select id="findByIdCode" resultType="com.obtk.bean.UpPass">
+        select id , text ,u_id from UpPass where u_id = #{id}
+    </select>
+
+    <update id="UpPssByCode">
+        update user set password = #{newPass} where telephone = #{telephone} and id = #{id}
+    </update>
 </mapper>

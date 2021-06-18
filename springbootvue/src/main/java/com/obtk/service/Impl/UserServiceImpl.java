@@ -1,8 +1,6 @@
 package com.obtk.service.Impl;
 
-import com.obtk.bean.ImageFile;
-import com.obtk.bean.Mz;
-import com.obtk.bean.User;
+import com.obtk.bean.*;
 import com.obtk.mapper.UserDao;
 import com.obtk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,10 +84,10 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<User> findAll(Integer id) {
+    public List<User> findAll(Integer id,Integer personalId) {
         List<User> list = null;
         try {
-            list = dao.findAll(id);
+            list = dao.findAll(id,personalId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,5 +143,33 @@ public class UserServiceImpl implements UserService {
             }
         }
         return list;
+    }
+
+    @Override
+    public List<UserInfo> findByPostUser(int id) {
+        return dao.findByPostUser(id);
+    }
+
+    @Override
+    public List<User> findByTelephoneUser(String telephone) {
+        return dao.findByTelephoneUser(telephone);
+    }
+
+    @Override
+    public List<UpPass> findByIdCode(Integer id) {
+        return dao.findByIdCode(id);
+    }
+
+    @Override
+    @Transactional
+    public Boolean UpPssByCode(Integer id, String telephone,String newPass) {
+        Boolean flag = false;
+        try {
+            dao.UpPssByCode(id,telephone,newPass);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 }

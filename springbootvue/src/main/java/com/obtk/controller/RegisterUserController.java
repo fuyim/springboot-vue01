@@ -1,5 +1,6 @@
 package com.obtk.controller;
 
+import com.obtk.bean.Dormitory;
 import com.obtk.bean.DormitoryArea;
 import com.obtk.bean.User;
 import com.obtk.bean.administratorCode;
@@ -91,6 +92,34 @@ public class RegisterUserController {
     @ResponseBody
     public String updateDormitoryArea(Integer id,Integer optionsId){
         Boolean flag = service.updateDormitoryArea(id,optionsId);
+        if (flag){
+            return "success";
+        }
+        return "error";
+    }
+
+
+    /**
+     * 查找所有的寝室号
+     * @return
+     */
+    @PostMapping("/findAllDormitory.do")
+    @ResponseBody
+    public List<Dormitory> findAllDormitory(){
+        List<Dormitory> list = service.findAllDormitory();
+        return list;
+    }
+
+    /**
+     * 插入学生对应的寝室
+     * @param id 用户id
+     * @param optionsId 寝室id
+     * @return
+     */
+    @GetMapping("/insertStudentDormitory.do")
+    @ResponseBody
+    public String insertStudentDormitory(Integer id , Integer optionsId){
+        Boolean flag = service.insertStudentDormitory(id,optionsId);
         if (flag){
             return "success";
         }

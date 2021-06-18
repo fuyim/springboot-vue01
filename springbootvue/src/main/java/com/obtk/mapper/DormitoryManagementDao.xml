@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.obtk.mapper.DormitoryManagementDao">
+
+    <sql id="userField">
+        id , username , password , sex ,  telephone , email ,QQ,  IDCard, post, adminName, nation, crateData
+    </sql>
+
+    <select id="findByDormitoryArea" resultType="com.obtk.bean.DormitoryArea">
+        select id ,dormitory_name , u_id , state from dormitoryArea where u_id = #{id}
+    </select>
+
+    <resultMap id="PersonalInfo" type="com.obtk.bean.PersonalInfo">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="telephone" property="telephone"/>
+        <result column="nation" property="nation"/>
+        <result column="name" property="dormitoryName"/>
+    </resultMap>
+
+    <select id="findPersonal" resultMap="PersonalInfo">
+        select u.id , u.username , u.nation , u.telephone ,d.name from user u ,  Student_dormitory s , dormitory d where u.id = s.u_id and s.dormitory_id = d.id and d.dormitoryArea_id = #{id}
+    </select>
+
+    <insert id="insertIntoUpPass">
+        insert into UpPass (id, text ,u_id) values (0,#{text},#{id})
+    </insert>
+
+    <delete id="deleteUpPass">
+        delete  from UpPass where u_id = #{id}
+    </delete>
+
+    <resultMap id="UserInfo" type="com.obtk.bean.UserInfo">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="sex" property="sex"/>
+        <result column="telephone" property="telephone"/>
+        <result column="nation" property="nation"/>
+        <result column="email" property="email"/>
+        <result column="dormitory_name" property="dormitoryAreaName"/>
+        <result column="name" property="dormitoryName"/>
+        <result column="dormitoryID" property="dormitoryID"/>
+        <result column="dormitoryArea_id" property="dormitoryAreaID" />
+        <association property="signIn" javaType="com.obtk.bean.SignIn">
+            <id property="id" column="id"/>
+            <result property="leaveInfo" column="leaveInfo"/>
+            <result property="signInTime" column="signInTime"/>
+            <result property="siginState" column="siginState"/>
+<!--            <result property="states" column="states"/>-->
+        </association>
+    </resultMap>
+
+    <select id="findByPersonalIdadministrator" resultMap="UserInfo">
+         select u.id ,u.username , u.sex ,u.telephone ,u.nation , u.email ,da.dormitory_name , da.id as dormitoryArea_id from
+            user u INNER JOIN dormitoryArea da on da.u_id = u.id and u.id = #{id}
+    </select>
+
+    <select id="findByPersonalIdUser" resultMap="UserInfo">
+        select u.id ,u.username , u.sex ,u.telephone ,u.nation , u.email, da.dormitory_name , d.name ,d.id  as dormitoryID , d.dormitoryArea_id from
+         user u  INNER JOIN Student_dormitory sd on u.id = sd.u_id and u.id = #{id}
+         INNER JOIN dormitory d on d.id = sd.dormitory_id
+         INNER JOIN dormitoryArea da on da.id = d.dormitoryArea_id
+    </select>
+
+    <select id="findByIdImage" resultType="com.obtk.bean.ImageFile">
+        select id , fileName , filePath , u_id from imageFile where u_id = #{id}
+    </select>
+
+    <select id="findByDormitoryIDUser" resultMap="UserInfo">
+         select u.id ,u.username , u.sex ,u.telephone  , u.nation ,  d.name ,d.id as dormitoryID from
+         user u INNER JOIN Student_dormitory sd on u.id = sd.u_id and sd.dormitory_id = #{dormitoryID}
+         INNER JOIN dormitory d on d.id = sd.dormitory_id
+    </select>
+
+<!--    <select id="findByPersonal" resultType="com.obtk.bean.User">-->
+<!--        select <include refid="userField"/> from user where  id =#{id}-->
+<!--    </select>-->
+
+    <select id="findByDormitoryAreaID" resultMap="UserInfo">
+        select u.username , da.dormitory_name from
+        user u INNER JOIN dormitoryArea da on u.id = da.u_id and da.id = #{dormitoryAreaID}
+    </select>
+
+    <select id="findByDormitoryByID" resultMap="UserInfo">
+        select d.id , d.name , da.dormitory_name from dormitory d , dormitoryArea da where d.dormitoryArea_id = da.id and d.dormitoryArea_id = #{dormitoryAreaID}
+    </select>
+
+    <select id="findSignInByDormitoryID" resultMap="UserInfo">
+        select s.id , u.username , s.signInTime ,s.leaveInfo ,  s.siginState  ,d.name from
+        signIn s INNER JOIN user u on s.u_id = u.id
+        INNER JOIN dormitory d on d.id = #{dormitoryID}
+        INNER JOIN Student_dormitory sd on sd.dormitory_id = d.id and sd.u_id = u.id
+    </select>
+
+</mapper>
