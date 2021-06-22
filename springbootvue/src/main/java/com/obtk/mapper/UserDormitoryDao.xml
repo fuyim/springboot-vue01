@@ -7,4 +7,32 @@
         insert into signIn (id , u_id , signInTime , leaveInfo , siginState)
         values (0,#{id},#{sigInTime},#{leaveInfo},1)
     </insert>
+
+    <insert id="MaintenanceReport">
+        insert into equipment (id,reminderTime,u_id,reminderInfo,dormitory_id,equipmentState,commentInfo,equipmentkey)
+        values (0,#{reminderTime},#{id},#{reminderInfo},#{dormitoryID},1,null,#{equipmentkey})
+    </insert>
+
+    <select id="findReportBydormitoryID" resultType="com.obtk.bean.Equipment">
+        select id,reminderTime,u_id,reminderInfo,dormitory_id,equipmentState,commentInfo
+        from equipment where dormitory_id = #{dormitoryID}
+    </select>
+
+    <update id="updateEquipmentState">
+        update equipment set equipmentState = 0 where dormitory_id = #{dormitoryID}
+    </update>
+
+    <insert id="markScore">
+        insert into score (id,score,u_id) values (0,#{score},#{id})
+    </insert>
+
+    <update id="updateComment">
+        update equipment set commentInfo = #{commentInfo} where dormitory_id = #{dormitoryID} and equipmentkey = #{equipmentkey}
+    </update>
+
+    <select id="findAllComment" resultType="com.obtk.bean.CommentInfo">
+        select u.id , u.username , e.reminderTime , e.commentInfo , i.fileName from
+        user u INNER JOIN equipment e on u.id = e.u_id and e.commentInfo is not null
+        INNER JOIN imageFile i on i.u_id = e.u_id limit 0,3
+    </select>
 </mapper>

@@ -94,4 +94,25 @@
         INNER JOIN Student_dormitory sd on sd.dormitory_id = d.id and sd.u_id = u.id
     </select>
 
+    <select id="findScore" resultType="integer">
+        select sum(score) from score
+    </select>
+
+
+    <resultMap id="MyEquipmentState" type="com.obtk.bean.Equipment">
+        <id column="id" property="id"/>
+        <result column="equipmentState" property="equipmentState"/>
+        <result column="reminderTime" property="reminderTime"/>
+        <result column="reminderInfo" property="reminderInfo"/>
+        <association property="dormitory" javaType="com.obtk.bean.Dormitory">
+            <id column="dormitory_id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+    <select id="findEquipmentState" resultMap="MyEquipmentState">
+        select e.id ,  e.equipmentState , e.reminderTime , e.reminderInfo ,d.name , d.id as dormitory_id  from
+        equipment e INNER JOIN dormitory d on e.dormitory_id = d.id
+        INNER JOIN dormitoryArea da on da.id = d.dormitoryArea_id and da.id =#{dormitoryAreaID}
+    </select>
+
 </mapper>

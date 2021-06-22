@@ -25,5 +25,9 @@ public interface DormitoryManagementService {
 
     List<UserInfo> findSignInByDormitoryID(Integer dormitoryID);
 
+    Integer findScore();
+
+    List<Equipment> findEquipmentState(Integer dormitoryAreaID);
+
 //    List<User> findByPersonal(Integer id);
 }

@@ -178,4 +178,24 @@ public class DormitoryManagementController {
         PageInfo<UserInfo> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
+
+
+    /**
+     * 查询分数
+     * @return
+     */
+    @PostMapping("/findScore.do")
+    @ResponseBody
+    public Integer findScore(){
+        Integer score = service.findScore();
+        return score;
+    }
+
+    @PostMapping("/findEquipmentState.do")
+    @ResponseBody
+    public List<Equipment> findEquipmentState(Integer dormitoryAreaID){
+        List<Equipment> list = service.findEquipmentState(dormitoryAreaID);
+        return list;
+    }
+
 }

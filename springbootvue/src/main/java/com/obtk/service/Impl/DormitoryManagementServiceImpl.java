@@ -93,4 +93,14 @@ public class DormitoryManagementServiceImpl implements DormitoryManagementServic
     public List<UserInfo> findSignInByDormitoryID(Integer dormitoryID) {
         return dao.findSignInByDormitoryID(dormitoryID);
     }
+
+    @Override
+    public Integer findScore() {
+        return dao.findScore();
+    }
+
+    @Override
+    public List<Equipment> findEquipmentState(Integer dormitoryAreaID) {
+        return dao.findEquipmentState(dormitoryAreaID);
+    }
 }

@@ -6,4 +6,5 @@ import lombok.Data;
 public class Dormitory {
     private Integer id ;
     private String name;
+    private Integer dormitoryArea_id;
 }
