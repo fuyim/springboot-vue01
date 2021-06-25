@@ -32,7 +32,8 @@ public class InterceptorsConfig implements WebMvcConfigurer {
                 "/insertIntoUpPass.do",
                 "/findByTelephoneUser.do",
                 "/findByIdCode.do",
-                "/UpPssByCode.do");
+                "/UpPssByCode.do",
+                "/updateRecipientsState.do");
 
     }
 }

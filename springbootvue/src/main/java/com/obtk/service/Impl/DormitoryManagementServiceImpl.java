@@ -103,4 +103,32 @@ public class DormitoryManagementServiceImpl implements DormitoryManagementServic
     public List<Equipment> findEquipmentState(Integer dormitoryAreaID) {
         return dao.findEquipmentState(dormitoryAreaID);
     }
+
+    @Override
+    @Transactional
+    public void updateRecipientsState(Integer state) {
+        dao.updateRecipientsState(state);
+    }
+
+    @Override
+    public Recipients findRecipientsState() {
+        return dao.findRecipientsState();
+    }
+
+    @Override
+    public List<DormitoryRate> findDormitoryRate(Integer dormitoryAreaID) {
+        return dao.findDormitoryRate(dormitoryAreaID);
+    }
+
+    @Override
+    public Boolean updateDormitoryRate(Integer score ,Integer id) {
+        Boolean flag = false;
+        try {
+            dao.updateDormitoryRate(score,id);
+            flag =true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
 }

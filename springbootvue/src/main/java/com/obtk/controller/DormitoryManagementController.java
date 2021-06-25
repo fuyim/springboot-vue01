@@ -6,8 +6,10 @@ import com.github.pagehelper.PageInfo;
 import com.obtk.bean.*;
 import com.obtk.service.DormitoryManagementService;
 import com.obtk.util.jwt.JwtUtil;
+import com.obtk.util.sendEmail.MailUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +29,15 @@ public class DormitoryManagementController {
     @Autowired
     private DormitoryManagementService service;
 
+    @Autowired
+    MailUtils mailUtils;
 
+
+    /**
+     * 根据管理员id查找寝室区域信息
+     * @param request
+     * @return
+     */
     @PostMapping("/findByDormitoryArea.do")
     @ResponseBody
     public List<DormitoryArea> findByDormitoryArea(HttpServletRequest request){
@@ -39,6 +49,11 @@ public class DormitoryManagementController {
         return list;
     }
 
+    /**
+     * 根据用户id查找用户信息
+     * @param id
+     * @return
+     */
     @GetMapping("/findPersonal.do")
     @ResponseBody
     public Map<String,Object> findPersonal(Integer id){
@@ -191,11 +206,100 @@ public class DormitoryManagementController {
         return score;
     }
 
+    /**
+     * 查找维修状态
+     * @param dormitoryAreaID
+     * @return
+     */
     @PostMapping("/findEquipmentState.do")
     @ResponseBody
     public List<Equipment> findEquipmentState(Integer dormitoryAreaID){
         List<Equipment> list = service.findEquipmentState(dormitoryAreaID);
         return list;
     }
+
+    /**
+     * 发送电子邮件给3271758240@qq.com
+     * @param from 发送者
+     * @param subject 标题
+     * @param content 内容
+     * @return
+     */
+    @PostMapping("/sendEmail.do")
+    @ResponseBody
+    public String sendEmail(String from,String subject,String content){
+        Boolean flag = false;
+        try {
+            mailUtils.sendEmail(from,"3271758240@qq.com",subject,content);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(flag){
+            return "success";
+        }
+        return "error";
+    }
+
+    /**
+     * 查找维修者状态
+     * @return
+     */
+    @PostMapping("/findRecipientsState.do")
+    @ResponseBody
+    public Recipients findRecipientsState(){
+        Recipients recipients =  service.findRecipientsState();
+        return recipients;
+    }
+
+    /**
+     * 修改维修者状态
+     * @param state
+     * @return
+     */
+    @GetMapping("/updateRecipientsState.do")
+    @ResponseBody
+    public String  updateRecipientsState(Integer state){
+        Boolean flag = false;
+        try {
+            service.updateRecipientsState(state);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(flag){
+            return "已接受";
+        }
+        return "error";
+    }
+
+    /**
+     * 根据寝室区域id查找对应寝室分数信息
+     * @param dormitoryAreaID
+     * @return
+     */
+    @PostMapping("/findDormitoryRate.do")
+    @ResponseBody
+    public List<DormitoryRate> findDormitoryRate(Integer dormitoryAreaID){
+        List<DormitoryRate> list = service.findDormitoryRate(dormitoryAreaID);
+        return list;
+    }
+
+    /**
+     * 更改对应寝室的分数
+     * @param score
+     * @param id
+     * @return
+     */
+    @GetMapping("/updateDormitoryRate.do")
+    @ResponseBody
+    public String updateDormitoryRate(Integer score , Integer id){
+        Boolean flag = service.updateDormitoryRate(score,id);
+        if (flag){
+            return "success";
+        }
+        return "error";
+    }
+
 
 }

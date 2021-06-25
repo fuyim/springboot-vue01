@@ -29,5 +29,13 @@ public interface DormitoryManagementService {
 
     List<Equipment> findEquipmentState(Integer dormitoryAreaID);
 
+    void updateRecipientsState(Integer state);
+
+    Recipients findRecipientsState();
+
+    List<DormitoryRate> findDormitoryRate(Integer dormitoryAreaID);
+
+    Boolean updateDormitoryRate(Integer score ,Integer id);
+
 //    List<User> findByPersonal(Integer id);
 }

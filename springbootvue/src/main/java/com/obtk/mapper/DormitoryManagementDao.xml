@@ -115,4 +115,22 @@
         INNER JOIN dormitoryArea da on da.id = d.dormitoryArea_id and da.id =#{dormitoryAreaID}
     </select>
 
+    <update id="updateRecipientsState">
+        update recipients set state = #{state} where id = 1
+    </update>
+
+    <select id="findRecipientsState" resultType="com.obtk.bean.Recipients">
+        select id , email , state from  recipients
+    </select>
+
+    <select id="findDormitoryRate" resultType="com.obtk.bean.DormitoryRate">
+        select dr.id ,  d.name , da.dormitory_name , dr.score from
+        dormitoryRate dr INNER JOIN  dormitory d on d.id = dr.dormitory_id
+        INNER JOIN dormitoryArea da on da.id = d.dormitoryArea_id and da.id = #{dormitoryAreaID}
+    </select>
+
+    <update id="updateDormitoryRate">
+        update dormitoryRate set score = #{score} where id = #{id}
+    </update>
+
 </mapper>

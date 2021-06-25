@@ -1,6 +1,7 @@
 package com.obtk;
 
 import com.obtk.util.jwt.JwtUtil;
+import com.obtk.util.sendEmail.MailUtils;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ class SpringbootvueApplicationTests {
 
     @Autowired
     private StringEncryptor stringEncryptor;
+
+    @Autowired
+    private MailUtils mailUtils;
 
     @Test
     void contextLoads() {
@@ -31,6 +35,11 @@ class SpringbootvueApplicationTests {
         map.put("password","qweqewqqzsda");
         String token = JwtUtil.getToken(map);
         System.out.println("token = " + token);
+    }
+
+    @Test
+    public void Test3(){
+        mailUtils.sendEmail("2414690715@qq.com","3271758240@qq.com","测试","<h1 style='color:red'>helloWorld</h1>");
     }
 
 }

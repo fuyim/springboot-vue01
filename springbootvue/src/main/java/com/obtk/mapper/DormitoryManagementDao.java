@@ -34,5 +34,13 @@ public interface DormitoryManagementDao {
 
     List<Equipment> findEquipmentState(Integer dormitoryAreaID);
 
+    void updateRecipientsState(Integer state);
+
+    Recipients findRecipientsState();
+
+    List<DormitoryRate> findDormitoryRate(Integer dormitoryAreaID);
+
+    void updateDormitoryRate(@Param("score") Integer score ,@Param("id") Integer id);
+
 //    List<User> findByPersonal(Integer id);
 }
